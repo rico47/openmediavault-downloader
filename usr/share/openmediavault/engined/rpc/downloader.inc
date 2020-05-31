@@ -193,6 +193,8 @@ class OMVRpcServiceDownloader extends \OMV\Rpc\ServiceAbstract
         $url = $object->get('url');
         $delete = boolval($object->get('delete'));
 
+        // install ffmpeg example: apt install ffmpeg by rico47
+        
         switch ($object->get('format')) {
             case "aac":
                 $format = "bestaudio[ext=aac]/bestaudio";
@@ -207,14 +209,16 @@ class OMVRpcServiceDownloader extends \OMV\Rpc\ServiceAbstract
                 $audio = true;
                 break;
             case "mp4";
-                $format = "best[ext=mp4]/best";
+            --    $format = "best[ext=mp4]/best";
+            ++    $format = "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio --merge-output-format mkv"; //by rico47   
                 break;
             case "wav":
                 $format = "bestaudio[ext=wav]/bestaudio";
                 $audio = true;
                 break;
             case "webm";
-                $format = "best[ext=webm]/best";
+            --  $format = "best[ext=webm]/best";
+            ++  $format = "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio --merge-output-format mkv"; //by rico47
                 break;
         }
         $cmdArgs = [];
@@ -236,7 +240,8 @@ class OMVRpcServiceDownloader extends \OMV\Rpc\ServiceAbstract
                 if ($object->get('subtitles')) {
                     $cmdArgs[] = "--all-subs --write-sub";
                 }
-                $cmdArgs[] = sprintf("--format '%s'", $format);
+             -- $cmdArgs[] = sprintf("--format '%s'", $format);
+             ++ $cmdArgs[] = sprintf("--format %s", $format);  //by rico47  
                 $cmdArgs[] = sprintf("-o \"%s/%s\"", $sfPath, $filename);
                 $cmdArgs[] = sprintf("\"%s\"", $url);
                 break;
@@ -249,7 +254,8 @@ class OMVRpcServiceDownloader extends \OMV\Rpc\ServiceAbstract
                 if ($object->get('subtitles')) {
                     $cmdArgs[] = "--all-subs --write-sub";
                 }
-                $cmdArgs[] = sprintf("--format '%s'", $format);
+             -- $cmdArgs[] = sprintf("--format '%s'", $format);
+             ++ $cmdArgs[] = sprintf("--format %s", $format); //by rico47
                 $cmdArgs[] = sprintf("\"%s\"", $url);
                 break;
 
@@ -264,7 +270,8 @@ class OMVRpcServiceDownloader extends \OMV\Rpc\ServiceAbstract
                 if ($object->get('subtitles')) {
                     $cmdArgs[] = "--all-subs --write-sub";
                 }
-                $cmdArgs[] = sprintf("--format '%s'", $format);
+             -- $cmdArgs[] = sprintf("--format '%s'", $format);
+             ++ $cmdArgs[] = sprintf("--format %s", $format); //by rico47
                 $cmdArgs[] = sprintf("--batch-file \"%s\"", $tmpfname);
                 break;
 
